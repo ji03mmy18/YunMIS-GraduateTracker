@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: linuxserver/mariadb:latest
+    environment:
+      MYSQL_DATABASE: 'nyust_mis'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: '1234'
+      MYSQL_ROOT_PASSWORD: 'root'
+    ports:
+      - "0.0.0.0:3306:3306"
+  phpmyadmin:
+    depends_on:
+      - mysql
+    image: linuxserver/phpmyadmin:latest
+    ports:
+      - "0.0.0.0:3001:80"
+    environment:
+      TZ: Asia/Taipei
+      PMA_HOST: mysql

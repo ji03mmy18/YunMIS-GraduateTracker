@@ -21,10 +21,19 @@ function permList(c, r, u, d) {
   return perm;
 }
 
+function queryFilter(source) {
+  let { id, year, eduType, complete } = source;
+  id === undefined ? id = '%' : id = `%${id}%`;
+  if (year === undefined) year = '%';
+  if (eduType === undefined) eduType = '%';
+  if (complete === undefined) complete = '%';
+  return { id, year, eduType, complete };
+}
+
 function auth(req, res, next) {
   return req.session.user ? next() : res.status(401).json({ status: false, msg: "NeedLogin"});
 }
 
 module.exports = {
-  rmEmpty, rmItem, pwHash, permList, auth
+  rmEmpty, rmItem, pwHash, permList, queryFilter, auth
 };

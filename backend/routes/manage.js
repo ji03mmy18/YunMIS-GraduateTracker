@@ -73,4 +73,25 @@ router.get('/query', auth, async (req, res, next) => {
   }
 })
 
+// 查詢單一學生資料
+router.get('/query/:id', auth, async (req, res, next) => {
+  let id = req.params.id;
+  let conn = await dbPool.getConnection();
+
+  try {
+    const rows = await conn.query("SELECT * FROM graduate WHERE ID = ?", [id]);
+
+    if (rows[0] === undefined || rows[0].ID != id) {
+      res.status(404).json({ status: false, msg: 'NotFound'});
+      return;
+    }
+
+    // 回傳查詢結果
+    res.status(200).json({ status: true, data: rows[0] });
+    return;
+  } finally {
+    conn.end();
+  }
+})
+
 module.exports = router;

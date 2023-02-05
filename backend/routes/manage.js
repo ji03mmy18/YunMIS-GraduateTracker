@@ -9,7 +9,7 @@ let dbPool = mariadb.createPool({
   database: process.env.DB_NAME,
 });
 
-let { pwHash, permList, auth, rmItem, queryFilter } = require('../utils/tool');
+let { pwHash, permList, auth, queryFilter } = require('../utils/tool');
 
 // 管理員登入
 router.post('/login', async (req, res, next) => {
@@ -59,7 +59,8 @@ router.get('/query', auth, async (req, res, next) => {
       rows = await conn.query("SELECT ID, Name, Complete FROM graduate WHERE Education_type IS NULL");
     } else {
       rows = await conn.query(
-        "SELECT ID, Name, Complete FROM graduate WHERE ID LIKE ? AND Year LIKE ? AND Education_type LIKE ? AND Complete LIKE ?",
+        "SELECT ID, Name, Complete FROM graduate WHERE \
+        ID LIKE ? AND Year LIKE ? AND Education_type LIKE ? AND Complete LIKE ?",
         [id, year, eduType, complete]
       );
     }

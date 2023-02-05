@@ -5,6 +5,15 @@ let session = require('express-session');
 let memoryStore = require('memorystore')(session);
 let logger = require('morgan');
 
+let mariadb = require('mariadb');
+let { dbConn } = require('./utils/tool');
+let dbPool = mariadb.createPool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME,
+});
+
 let dataRouter = require('./routes/data');
 let manageRouter = require('./routes/manage');
 
@@ -29,6 +38,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(dbConn(dbPool));
 
 app.use('/api/data', dataRouter);
 app.use('/api/manage', manageRouter);

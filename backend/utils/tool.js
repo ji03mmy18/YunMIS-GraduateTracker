@@ -34,6 +34,13 @@ function auth(req, res, next) {
   return req.session.user ? next() : res.status(401).json({ status: false, msg: "NeedLogin"});
 }
 
+function dbConn(dbPool) {
+  return (req, res, next) => {
+    req.dbPool = dbPool;
+    next();
+  }
+}
+
 module.exports = {
-  rmEmpty, rmItem, pwHash, permList, queryFilter, auth
+  rmEmpty, rmItem, pwHash, permList, queryFilter, auth, dbConn
 };

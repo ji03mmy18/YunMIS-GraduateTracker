@@ -2,15 +2,15 @@ let express = require('express');
 let router = express.Router();
 
 let mariadb = require('mariadb');
-const dbPool = mariadb.createPool({
+let dbPool = mariadb.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
 });
 
-import color from '../utils/color';
-import { rmEmpty, rmItem } from '../utils/tool';
+let color = require('../utils/color');
+let { rmEmpty, rmItem } = require('../utils/tool');
 
 // 接收學號，回傳基本資訊或拒絕填寫
 router.get('/', async (req, res, next) => {
@@ -52,7 +52,7 @@ router.post('/', async (req, res, next) => {
 
   try {
     // 過濾學號未找到或已完成填寫
-    let rows = await conn.query("SELECT * FROM graduate WHERE ID = ?", [id]);
+    const rows = await conn.query("SELECT * FROM graduate WHERE ID = ?", [id]);
     if (rows[0] === undefined || rows[0].Complete == 'Y') {
       console.log(`${color.fgYellow("Warn")}: [${id}] ${rows[0] === undefined ? "not found." : "already finish questionnaire."}`);
       res.status(200).json({ status: false, msg: 'NotFound|Finished'});
@@ -60,7 +60,7 @@ router.post('/', async (req, res, next) => {
     }
 
     // 寫入資料
-    let result = await conn.query(
+    const result = await conn.query(
       "UPDATE graduate SET Sex = ?, Education_type = ?, School_Email = ?, Email = ?, Facebook_Email = ?, Phone = ?, \
       Address = ?, Teacher = ?, Status = ?, Status_detail = ?, Complete = 'Y' WHERE ID = ?",
       [sex, eduType, schoolMail, otherMail, fbid, phone, address, teacher, status, statusDetail, id]

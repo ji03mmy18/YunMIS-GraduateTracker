@@ -9,7 +9,8 @@ const dbPool = mariadb.createPool({
   database: process.env.DB_NAME,
 });
 
-let color = require('../utils/color');
+import color from '../utils/color';
+import { rmEmpty, rmItem } from '../utils/tool';
 
 // 接收學號，回傳基本資訊或拒絕填寫
 router.get('/', async (req, res, next) => {
@@ -32,7 +33,7 @@ router.get('/', async (req, res, next) => {
     }
 
     // 回傳資料
-    res.status(200).json({ status: true, user: removeEmpty(rows[0]) });
+    res.status(200).json({ status: true, user: rmItem(rmEmpty(rows[0]), 'Complete') });
     return;
   } finally {
     conn.end();
@@ -76,9 +77,5 @@ router.post('/', async (req, res, next) => {
     conn.end();
   }
 })
-
-function removeEmpty(obj) {
-  return Object.fromEntries(Object.entries(obj).filter(([_, v]) => v != null));
-}
 
 module.exports = router;

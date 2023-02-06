@@ -46,6 +46,14 @@ function queryFilter(source) {
   return { id, year, eduType, complete };
 }
 
+// 匯出過濾器，替換掉空白年份及布林轉換
+function exportFilter(source) {
+  let { year, header } = source;
+  if (year === undefined || year == '') year = '%';
+  header = (header === 'true');
+  return { year, header };
+}
+
 // 身份驗證 Middleware
 function auth(req, res, next) {
   return req.session.user ? next() : res.status(401).json({ status: false, msg: "NeedLogin"});
@@ -76,5 +84,7 @@ function fileUpload(req, res, next) {
 }
 
 module.exports = {
-  rmEmpty, rmItem, pwHash, permList, queryFilter, auth, dbConn, fileUpload
+  rmEmpty, rmItem, pwHash, permList,
+  queryFilter, exportFilter,
+  auth, dbConn, fileUpload
 };

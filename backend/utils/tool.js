@@ -56,7 +56,14 @@ function exportFilter(source) {
 
 // 身份驗證 Middleware
 function auth(req, res, next) {
-  return req.session.user ? next() : res.status(401).json({ status: false, msg: "NeedLogin"});
+  console.log(req.sessionID);
+  console.log(req.session);
+  return req.session.user ? next() : res.status(401).json({ status: false, msg: "NeedLogin" });
+}
+
+// 進階管理員驗證 Middleware
+function admin(req, res, next) {
+  return req.session.deletable ? res.status(403).json({ status: false, msg: "NotAdvanceManager" }) : next();
 }
 
 // 資料庫注入 Middleware
@@ -86,5 +93,5 @@ function fileUpload(req, res, next) {
 module.exports = {
   rmEmpty, rmItem, pwHash, permList,
   queryFilter, exportFilter,
-  auth, dbConn, fileUpload
+  auth, admin, dbConn, fileUpload
 };

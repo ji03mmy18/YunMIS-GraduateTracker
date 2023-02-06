@@ -1,9 +1,10 @@
 let express = require('express');
 let router = express.Router();
 
-let { pwHash, permList, auth } = require('../utils/tool');
+let { pwHash, permList, auth, admin } = require('../utils/tool');
 let queryRouter = require('./mgmt/query');
 let batchRouter = require('./mgmt/batch');
+let userRouter = require('./mgmt/user');
 
 // 管理員登入
 router.post('/login', async (req, res, next) => {
@@ -23,6 +24,7 @@ router.post('/login', async (req, res, next) => {
     req.session.user = user;
     req.session.nick = rows[0].Nick;
     req.session.perm = permList(rows[0].PermCreate, rows[0].PermRead, rows[0].PermUpdate, rows[0].PermDelete);
+    req.session.deletable = rows[0].Deletable;
     res.status(200).json({ status: true, msg: 'LoggedIn' });
     return;
   } finally {
@@ -43,5 +45,8 @@ router.use('/query', auth, queryRouter);
 
 // 註冊 batch 路由
 router.use('/batch', auth, batchRouter);
+
+// 註冊 user 路由
+router.use('/user', auth, admin, userRouter);
 
 module.exports = router;

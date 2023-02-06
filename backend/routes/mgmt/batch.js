@@ -32,7 +32,7 @@ router.post('/import', fileUpload, async (req, res, next) => {
         }
       });
 
-    res.status(200).json({ status: true, msg: "UploadDone", update: updated, keep: keeped, new: inserted });
+    res.status(200).json({ status: true, msg: 'UploadDone', update: updated, keep: keeped, new: inserted });
     return;
   } finally {
     conn.end();
@@ -64,7 +64,7 @@ router.get('/export', async (req, res, next) => {
     // 查詢年度資料
     const rows = await conn.query("SELECT * FROM graduate WHERE Year LIKE ?", [year]);
     if (rows[0] === undefined) {
-      res.status(404).json({ status: false, msg: "ExportYearNotFound" });
+      res.status(404).json({ status: false, msg: 'ExportYearNotFound' });
       return;
     }
 

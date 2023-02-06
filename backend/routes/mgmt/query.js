@@ -72,12 +72,12 @@ router.patch('/:id', async (req, res, next) => {
       [sex, eduType, schoolMail, otherMail, fbid, phone, address, teacher, status, statusDetail, id]
     );
     if (result.affectedRows != 1) {
-      res.status(500).json({ status: false, msg: "StoreError" });
+      res.status(500).json({ status: false, msg: 'StoreError' });
       return;
     }
 
     // 回傳結果
-    res.status(200).json({ status: true, msg: "Done" });
+    res.status(200).json({ status: true, msg: 'Done' });
     return;
   } finally {
     conn.end();
@@ -99,7 +99,7 @@ router.delete('/:id', async(req, res, next) => {
     // 檢查插入是否成功
     if (insResult.affectedRows != 1) {
       console.log(`${color.fgRed("Error")}: [${id}] delete failed, cannot insert old record to remove area.`);
-      res.status(500).json({ status: false, msg: "DeleteError" });
+      res.status(500).json({ status: false, msg: 'DeleteError' });
       return;
     }
     // 將 graduate 表中的資料移除
@@ -107,11 +107,11 @@ router.delete('/:id', async(req, res, next) => {
     // 檢查是否成功移除
     if (delResult.affectedRows != 1) {
       console.log(`${color.fgRed("Error")}: [${id}] delete failed, cannot delete old record from graduate.`);
-      res.status(500).json({ status: false, msg: "DeleteError" });
+      res.status(500).json({ status: false, msg: 'DeleteError' });
     }
 
     // 回傳執行結果
-    res.status(200).json({ status: true, msg: "Done" });
+    res.status(200).json({ status: true, msg: 'Done' });
     return;
   } finally {
     conn.end();

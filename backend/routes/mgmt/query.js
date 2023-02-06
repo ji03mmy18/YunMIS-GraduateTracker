@@ -2,10 +2,10 @@ let express = require('express');
 let router = express.Router({mergeParams: true});
 
 let color = require('../../utils/color');
-let { auth, queryFilter } = require('../../utils/tool');
+let { queryFilter } = require('../../utils/tool');
 
 // 查詢批量學生資料
-router.get('', auth, async (req, res, next) => {
+router.get('', async (req, res, next) => {
   let mode = req.query.mode;
   let { id, year, eduType, complete } = queryFilter(req.query);
   let conn = await req.dbPool.getConnection();
@@ -34,7 +34,7 @@ router.get('', auth, async (req, res, next) => {
 });
 
 // 查詢單一學生資料
-router.get('/:id', auth, async (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
   let id = req.params.id;
   let conn = await req.dbPool.getConnection();
 
@@ -55,7 +55,7 @@ router.get('/:id', auth, async (req, res, next) => {
 });
 
 // 修改單一學生資料
-router.patch('/:id', auth, async (req, res, next) => {
+router.patch('/:id', async (req, res, next) => {
   let id = req.params.id;
   let {
     sex, eduType, schoolMail,
@@ -85,7 +85,7 @@ router.patch('/:id', auth, async (req, res, next) => {
 });
 
 // 刪除單一學生
-router.delete('/:id', auth, async(req, res, next) => {
+router.delete('/:id', async(req, res, next) => {
   let id = req.params.id;
   let conn = await req.dbPool.getConnection();
 
@@ -118,4 +118,4 @@ router.delete('/:id', auth, async(req, res, next) => {
   }
 });
 
-module.exports = router
+module.exports = router;

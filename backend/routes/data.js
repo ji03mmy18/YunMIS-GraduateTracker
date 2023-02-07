@@ -1,21 +1,14 @@
 let express = require('express');
 let router = express.Router();
 
-let mariadb = require('mariadb');
-let dbPool = mariadb.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME,
-});
-
-let { rmEmpty, rmItem } = require('../utils/tool');
-let color = require('../utils/color');
+let { rmEmpty, rmItem } = require('../misc/tool');
+let { Captcha } = require('../misc/middleware');
+let color = require('../misc/color');
 
 // 接收學號，回傳基本資訊或拒絕填寫
-router.get('/', async (req, res, next) => {
+router.get('/', Captcha, async (req, res, next) => {
   let id = req.query.id;
-  let conn = await dbPool.getConnection();
+  let conn = await req.dbPool.getConnection();
 
   try {
     const rows = await conn.query("SELECT * FROM graduate WHERE ID = ?", [id]);
@@ -48,7 +41,7 @@ router.post('/', async (req, res, next) => {
     otherMail, fbid, phone, address,
     teacher, status, statusDetail
   } = req.body;
-  let conn = await dbPool.getConnection();
+  let conn = await req.dbPool.getConnection();
 
   try {
     // 過濾學號未找到或已完成填寫

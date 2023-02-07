@@ -10,6 +10,7 @@ let upload = multer({
   }
 });
 let { body } = require('express-validator');
+let captcha = require('express-hcaptcha');
 
 
 // 身份驗證 Middleware
@@ -56,7 +57,22 @@ function permCheck(req, res, next) {
   return checkItems;
 }
 
+// hCaptcha 驗證 Middleware
+function Captcha(req, res, next) {
+  if (process.env.HCAP_ENABLE != 'true') {
+    return next();
+  }
+  return captcha.middleware.validate(process.env.HCAP_SECRET)(req, res, next);
+}
+
+// 錯誤攔截，處理所有系統中拋出的錯誤，避免直接回傳錯誤細節給使用者
+function errorHandler(err, req, res, next) {
+  console.log(err.message);
+  res.status(500).json({ status: false, msg: 'ErrorHappened' });
+  return;
+}
+
 module.exports = {
-  auth, admin, dbConn,
-  fileUpload, permCheck
+  auth, admin, dbConn, fileUpload,
+  permCheck, Captcha, errorHandler
 }

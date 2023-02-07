@@ -2,9 +2,9 @@ let express = require('express');
 let router = express.Router({mergeParams: true});
 let { parse, stringify } = require('csv');
 
-let { exportFilter } = require('../../utils/tool');
-let { fileUpload } = require('../../utils/middleware');
-let color = require('../../utils/color');
+let { exportFilter } = require('../../misc/tool');
+let { fileUpload } = require('../../misc/middleware');
+let color = require('../../misc/color');
 
 // 批量學生匯入
 router.post('/import', fileUpload, async (req, res, next) => {

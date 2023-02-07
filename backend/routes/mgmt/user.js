@@ -2,8 +2,8 @@ let express = require('express');
 let router = express.Router({mergeParams: true});
 let { validationResult } = require('express-validator');
 
-let { pwHash } = require('../../utils/tool');
-let { permCheck } = require('../../utils/middleware');
+let { pwHash } = require('../../misc/tool');
+let { permCheck } = require('../../misc/middleware');
 
 // 取得管理員列表
 router.get('/list', async (req, res, next) => {

@@ -12,6 +12,10 @@ Session Related:
 - SESS_SECRET
 - SALT
 
+Bot Validation:
+- HCAP_ENABLE
+- HCAP_SECRET
+
 ## 路由設計
 
 - 學生端: data.js
@@ -28,7 +32,7 @@ Session Related:
 - [x] 4. 匯出資料(基於 csv格式，以畢業年作過濾條件)
 - [x] 5. 帳號管理(可新增能登入管理介面的使用者)
 - [x] 6. 權限管理(基於 新增、查詢、更新、刪除進行控制)
-- [ ] 7. 真人驗證(以hCaptcha作為驗證，避免機器人影響)
+- [x] 7. 真人驗證(以hCaptcha作為驗證，避免機器人影響)
 - [ ] 8. 統計數據(依照研發處調查表格為樣板提供統計資料)
 
 ## 已知問題

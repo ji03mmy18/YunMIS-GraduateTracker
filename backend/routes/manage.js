@@ -1,8 +1,8 @@
 let express = require('express');
 let router = express.Router();
 
-let { pwHash, permList } = require('../utils/tool');
-let { auth, admin } = require('../utils/middleware');
+let { pwHash, permList } = require('../misc/tool');
+let { auth, admin } = require('../misc/middleware');
 let queryRouter = require('./mgmt/query');
 let batchRouter = require('./mgmt/batch');
 let userRouter = require('./mgmt/user');

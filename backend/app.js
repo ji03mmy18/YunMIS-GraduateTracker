@@ -6,7 +6,7 @@ let memoryStore = require('memorystore')(session);
 let logger = require('morgan');
 
 let mariadb = require('mariadb');
-let { dbConn } = require('./utils/tool');
+let { dbConn } = require('./utils/middleware');
 let dbPool = mariadb.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,

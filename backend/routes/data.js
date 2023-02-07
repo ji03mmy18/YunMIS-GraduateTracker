@@ -9,8 +9,8 @@ let dbPool = mariadb.createPool({
   database: process.env.DB_NAME,
 });
 
-let color = require('../utils/color');
 let { rmEmpty, rmItem } = require('../utils/tool');
+let color = require('../utils/color');
 
 // 接收學號，回傳基本資訊或拒絕填寫
 router.get('/', async (req, res, next) => {
@@ -55,7 +55,7 @@ router.post('/', async (req, res, next) => {
     const rows = await conn.query("SELECT * FROM graduate WHERE ID = ?", [id]);
     if (rows[0] === undefined || rows[0].Complete == 'Y') {
       console.log(`${color.fgYellow("Warn")}: [${id}] ${rows[0] === undefined ? "not found." : "already finish questionnaire."}`);
-      res.status(200).json({ status: false, msg: 'NotFound|Finished'});
+      res.status(200).json({ status: false, msg: rows[0] === undefined ? 'NotFound' : 'Finished' });
       return;
     }
 

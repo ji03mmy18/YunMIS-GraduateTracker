@@ -1,8 +1,8 @@
 let express = require('express');
 let router = express.Router({mergeParams: true});
 
-let color = require('../../utils/color');
 let { queryFilter } = require('../../utils/tool');
+let color = require('../../utils/color');
 
 // 查詢批量學生資料
 router.get('', async (req, res, next) => {

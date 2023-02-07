@@ -56,8 +56,6 @@ function exportFilter(source) {
 
 // 身份驗證 Middleware
 function auth(req, res, next) {
-  console.log(req.sessionID);
-  console.log(req.session);
   return req.session.user ? next() : res.status(401).json({ status: false, msg: "NeedLogin" });
 }
 

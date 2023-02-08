@@ -2,10 +2,11 @@ let express = require('express');
 let router = express.Router({mergeParams: true});
 
 let { queryFilter } = require('../../misc/tool');
+let { permCheck } = require('../../misc/middleware');
 let color = require('../../misc/color');
 
 // 查詢批量學生資料
-router.get('', async (req, res, next) => {
+router.get('', permCheck('R'), async (req, res, next) => {
   let mode = req.query.mode;
   let { id, year, eduType, complete } = queryFilter(req.query);
   let conn = await req.dbPool.getConnection();
@@ -34,7 +35,7 @@ router.get('', async (req, res, next) => {
 });
 
 // 查詢單一學生資料
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', permCheck('R'), async (req, res, next) => {
   let id = req.params.id;
   let conn = await req.dbPool.getConnection();
 
@@ -54,8 +55,31 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
+// 新增單一學生
+router.post('', permCheck('C'), async (req, res, next) => {
+  let { id, name, eduType, year } = req.body;
+  let conn = await req.dbPool.getConnection();
+
+  try {
+    // 插入新資料
+    let result = await conn.query(
+      "INSERT INTO graduate(ID, Name, Education_type, Year) VALUES (?, ?, ?, ?)",
+      [id, name, eduType, year]
+    );
+    if (result.affectedRows != 1) {
+      res.status(500).json({ status: false, msg: 'CreateError' });
+      return;
+    }
+
+    res.status(200).json({ status: true,  msg: 'Done' });
+    return;
+  } finally {
+    conn.end();
+  }
+})
+
 // 修改單一學生資料
-router.patch('/:id', async (req, res, next) => {
+router.patch('/:id', permCheck('U'), async (req, res, next) => {
   let id = req.params.id;
   let {
     sex, eduType, schoolMail,
@@ -85,7 +109,7 @@ router.patch('/:id', async (req, res, next) => {
 });
 
 // 刪除單一學生
-router.delete('/:id', async(req, res, next) => {
+router.delete('/:id', permCheck('D'), async(req, res, next) => {
   let id = req.params.id;
   let conn = await req.dbPool.getConnection();
 

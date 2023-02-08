@@ -3,11 +3,11 @@ let router = express.Router({mergeParams: true});
 let { parse, stringify } = require('csv');
 
 let { exportFilter } = require('../../misc/tool');
-let { fileUpload } = require('../../misc/middleware');
+let { permCheck, fileUpload } = require('../../misc/middleware');
 let color = require('../../misc/color');
 
 // 批量學生匯入
-router.post('/import', fileUpload, async (req, res, next) => {
+router.post('/import', permCheck('C'), fileUpload, async (req, res, next) => {
   let conn = await req.dbPool.getConnection();
   let keeped = [];
   let updated = [];
@@ -15,23 +15,23 @@ router.post('/import', fileUpload, async (req, res, next) => {
 
   try {
     //透過 csv-parse 將資料轉換成物件
-    parse(req.file.buffer, { delimiter: ',', columns: true })
-      .on("data", async (row) => {
-        // 每送入一筆資料就儲存一次
-        let result = await conn.query("INSERT INTO graduate(ID, Name, Education_type, Year)\
-          VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE ID = ?, Name = ?, Education_type = ?, Year = ?",
-          [row['ID'], row['Name'], row['eduType'], row['Year'],
-            row['ID'], row['Name'], row['eduType'], row['Year']]
-        );
-        // 檢查是否有正確存入
-        if (result.affectedRows == 0) {
-          keeped.push(row['ID']);
-        } else if (result.affectedRows == 1) {
-          inserted.push(row['ID']);
-        } else if (result.affectedRows == 2) {
-          updated.push(row['ID']);
-        }
-      });
+    let parser = parse(req.file.buffer, { delimiter: ',', columns: true });
+
+    for await(const row of parser) {
+      let result = await conn.query("INSERT INTO graduate(ID, Name, Education_type, Year)\
+        VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE ID = ?, Name = ?, Education_type = ?, Year = ?",
+        [row['ID'], row['Name'], row['eduType'], row['Year'],
+        row['ID'], row['Name'], row['eduType'], row['Year']]
+      );
+      // 檢查是否有正確存入
+      if (result.affectedRows == 0) {
+        keeped.push(row['ID']);
+      } else if (result.affectedRows == 1) {
+        inserted.push(row['ID']);
+      } else if (result.affectedRows == 2) {
+        updated.push(row['ID']);
+      }
+    }
 
     res.status(200).json({ status: true, msg: 'UploadDone', update: updated, keep: keeped, new: inserted });
     return;
@@ -57,7 +57,7 @@ router.get('/template', async (req, res, next) => {
 });
 
 // 批量紀錄導出
-router.get('/export', async (req, res, next) => {
+router.get('/export', permCheck('R'), async (req, res, next) => {
   let { year, header } = exportFilter(req.query);
   let conn = await req.dbPool.getConnection();
 

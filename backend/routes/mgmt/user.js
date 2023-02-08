@@ -3,7 +3,7 @@ let router = express.Router({mergeParams: true});
 let { validationResult } = require('express-validator');
 
 let { pwHash } = require('../../misc/tool');
-let { permCheck } = require('../../misc/middleware');
+let { permFieldCheck } = require('../../misc/middleware');
 
 // 取得管理員列表
 router.get('/list', async (req, res, next) => {
@@ -25,7 +25,7 @@ router.get('/list', async (req, res, next) => {
 });
 
 // 新增管理員
-router.post('/new', permCheck(), async (req, res, next) => {
+router.post('/new', permFieldCheck(), async (req, res, next) => {
   let {
     user, pass, nick, pCreate,
     pRead, pUpdate, pDelete
@@ -58,7 +58,7 @@ router.post('/new', permCheck(), async (req, res, next) => {
 });
 
 // 修改管理員設定
-router.patch('/:id', permCheck(), async (req, res, next) => {
+router.patch('/:id', permFieldCheck(), async (req, res, next) => {
   let uid = req.params.id;
   let {
     user, pass, nick, pCreate,

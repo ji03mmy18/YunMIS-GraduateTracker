@@ -15,12 +15,19 @@ let captcha = require('express-hcaptcha');
 
 // 身份驗證 Middleware
 function auth(req, res, next) {
-  return req.session.user ? next() : res.status(401).json({ status: false, msg: "NeedLogin" });
+  return req.session.user ? next() : res.status(401).json({ status: false, msg: 'NeedLogin' });
 }
 
 // 進階管理員驗證 Middleware
 function admin(req, res, next) {
-  return req.session.deletable ? res.status(403).json({ status: false, msg: "NotAdvanceManager" }) : next();
+  return req.session.deletable ? res.status(403).json({ status: false, msg: 'NotAdvanceManager' }) : next();
+}
+
+// 管理員權限驗證 Middleware
+function permCheck(perm) {
+  return (req, res, next) => {
+    return req.session.perm.includes(perm) ? next() : res.status(403).json({ status: false, msg: 'PermissionDenied' });
+  }
 }
 
 // 資料庫注入 Middleware
@@ -47,8 +54,8 @@ function fileUpload(req, res, next) {
   });
 }
 
-// 權限有效驗證 Middleware
-function permCheck(req, res, next) {
+// 權限欄位驗證 Middleware
+function permFieldCheck(req, res, next) {
   let checkItems = [];
   checkItems.push(body('pCreate').isInt({ min: 0, max: 1 }));
   checkItems.push(body('pRead').isInt({ min: 0, max: 1 }));
@@ -67,12 +74,16 @@ function Captcha(req, res, next) {
 
 // 錯誤攔截，處理所有系統中拋出的錯誤，避免直接回傳錯誤細節給使用者
 function errorHandler(err, req, res, next) {
-  console.log(err.message);
+  if (err.message == "bad request - no token provided in body") {
+    res.status(400).json({ status: false, msg: 'CaptchaNotFound' });
+    return;
+  }
+  console.log(err);
   res.status(500).json({ status: false, msg: 'ErrorHappened' });
   return;
 }
 
 module.exports = {
-  auth, admin, dbConn, fileUpload,
-  permCheck, Captcha, errorHandler
+  auth, permCheck, admin, dbConn, fileUpload,
+  permFieldCheck, Captcha, errorHandler
 }

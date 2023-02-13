@@ -3,13 +3,14 @@
     <div class="thumbnail"><img src="@/assets/hat.svg" alt="main page" /></div>
     <form class="form">
       <input class="sid" type="text" name="id" id="id" placeholder="請填入您的學號">
-      <p></p>
+      <vue-hcaptcha sitekey="test"></vue-hcaptcha>
       <button type="submit">點我填寫</button>
     </form>
   </div>
 </template>
 
 <script setup>
+import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
 </script>
 
 <style scoped>
@@ -36,13 +37,16 @@
 
 .sid {
   outline: 0;
-  background: #f2f2f2;
+  background:rgb(250, 250, 250);
   width: 100%;
-  border: 0;
   margin: 0px 0px 15px 0px;
-  padding: 15px;
-  border-radius: 5px;
-  box-sizing: border-box;
+  padding: 15px 0px 15px 0px;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 4px;
+  border-color: rgb(224, 224, 224);
+  box-sizing: content-box;
+  text-align: center;
   font-family: 'Microsoft JhengHei';
   font-weight: bolder;
   font-size: 150%;

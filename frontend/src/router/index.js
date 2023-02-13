@@ -8,6 +8,12 @@ const routes = [
     name: 'home',
     component: () => import('@/components/HelloWorld.vue'),
     meta: { title: titleFormat('Home') }
+  },
+  {
+    path: '/test',
+    name: 'main',
+    component: () => import('@/components/Home.vue'),
+    meta: { title: titleFormat('Main') }
   }
 ]
 

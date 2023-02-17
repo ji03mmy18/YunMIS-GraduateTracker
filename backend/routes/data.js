@@ -6,8 +6,8 @@ let { Captcha } = require('../misc/middleware');
 let color = require('../misc/color');
 
 // 接收學號，回傳基本資訊或拒絕填寫
-router.get('/', Captcha, async (req, res, next) => {
-  let id = req.query.id;
+router.post('/', Captcha, async (req, res, next) => {
+  let { id } = req.body;
   let conn = await req.dbPool.getConnection();
 
   try {
@@ -31,11 +31,10 @@ router.get('/', Captcha, async (req, res, next) => {
   } finally {
     conn.end();
   }
-
 });
 
 // 接收內容，進行儲存，會先檢查是否可以儲存
-router.post('/', async (req, res, next) => {
+router.post('/save', async (req, res, next) => {
   let {
     id, sex, eduType, schoolMail,
     otherMail, fbid, phone, address,
@@ -69,6 +68,6 @@ router.post('/', async (req, res, next) => {
   } finally {
     conn.end();
   }
-})
+});
 
 module.exports = router;

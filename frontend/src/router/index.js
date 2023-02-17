@@ -6,13 +6,19 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: () => import('@/components/HelloWorld.vue'),
+    component: () => import('@/components/Home.vue'),
     meta: { title: titleFormat('Home') }
+  },
+  {
+    path: '/form',
+    name: 'form',
+    component: () => import('@/components/Form.vue'),
+    meta: { title: titleFormat('Form') }
   },
   {
     path: '/test',
     name: 'main',
-    component: () => import('@/components/Home.vue'),
+    component: () => import('@/components/HelloWorld.vue'),
     meta: { title: titleFormat('Main') }
   }
 ]

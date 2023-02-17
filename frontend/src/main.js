@@ -1,7 +1,8 @@
 import { createApp } from 'vue';
 import router from '@/router';
 import pinia from '@/store';
-// import './style.css'
+import api from '@/axios';
+import './style.css'
 import App from './App.vue'
 
 // import 'vuetify/styles';
@@ -14,7 +15,7 @@ const app = createApp(App);
 //   components,
 //   directives
 // });
-
+app.provide('api', api);
 app.use(router);
 app.use(pinia);
 app.mount('#app');

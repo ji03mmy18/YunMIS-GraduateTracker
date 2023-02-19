@@ -22,10 +22,10 @@ const routes = [
     meta: { title: titleFormat('Done') }
   },
   {
-    path: '/test',
-    name: 'main',
-    component: () => import('@/components/HelloWorld.vue'),
-    meta: { title: titleFormat('Main') }
+    path: '/manage',
+    name: 'manage',
+    component: () => import('@/components/Manage.vue'),
+    meta: { title: titleFormat('Manage') }
   }
 ]
 

@@ -4,6 +4,12 @@
     <div class="thumbnail"><img src="@/assets/hat.svg" alt="main page" /></div>
     <form class="form" @submit.prevent="getInfo">
       <input required class="sid" type="text" v-model="id" placeholder="請填入您的學號">
+      <Transition name="admin">
+        <div v-if="id == 'manage'">
+          <input required class="account" type="text" v-model="account" placeholder="請輸入管理員帳號">
+          <input required class="passwd" type="password" v-model="passwd" placeholder="請輸入管理員密碼">
+        </div>
+      </Transition>
       <vue-hcaptcha sitekey="c141ec95-c510-46de-9001-2526342cd0ef" @verify="verify"></vue-hcaptcha>
       <button type="submit">點我填寫</button>
     </form>
@@ -21,21 +27,23 @@
 </template>
 
 <script setup>
-import { inject } from 'vue';
-import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
+import { inject, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
 import { useUserStore } from '@/store/userStore';
-import { ref } from 'vue';
+
+const user = useUserStore();
+const router = useRouter();
+const api = inject('api');
 
 const id = ref('');
 const token = ref('');
 const eKey = ref('');
+const account = ref('');
+const passwd = ref('');
 const apiErr = ref(false);
 const apiMsg = ref('');
 const pageReload = ref(false);
-const api = inject('api');
-const router = useRouter();
-const user = useUserStore();
 
 const verify = (tokenStr, ekey) => {
   token.value = tokenStr;
@@ -51,6 +59,14 @@ const closeDialog = () =>  {
 }
 
 const getInfo = () => {
+  id.value == 'manage' ? managerReq() : studentReq();
+}
+
+const managerReq = () => {
+  console.log(account.value, passwd.value);
+}
+
+const studentReq = () => {
   api.post('/data', {
     id: id.value, token: token.value
   }).then((res) => {
@@ -120,7 +136,7 @@ h1 {
   box-sizing: border-box;
 }
 
-.sid {
+.form input {
   outline: 0;
   background:rgb(250, 250, 250);
   width: 100%;
@@ -136,7 +152,7 @@ h1 {
   transition: background-color 0.25s;
 }
 
-.sid:hover {
+.form input:hover {
   background-color: rgb(245, 245, 245);
 }
 
@@ -158,5 +174,15 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 1px auto;
+}
+
+.admin-enter-active,
+.admin-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.admin-enter-from,
+.admin-leave-to {
+  opacity: 0;
 }
 </style>

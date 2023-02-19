@@ -8,6 +8,16 @@
       <button type="submit">點我填寫</button>
     </form>
   </div>
+  <v-dialog v-model="apiErr" persistent width="600">
+    <v-card>
+      <v-card-text>
+        {{ apiMsg }}
+      </v-card-text>
+      <v-card-actions>
+        <v-btn color="primary" block @click="closeDialog">關閉</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup>
@@ -15,37 +25,73 @@ import { inject } from 'vue';
 import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@/store/userStore';
+import { ref } from 'vue';
 
-let id = "";
-let token = "";
-let eKey = "";
+const id = ref('');
+const token = ref('');
+const eKey = ref('');
+const apiErr = ref(false);
+const apiMsg = ref('');
+const pageReload = ref(false);
 const api = inject('api');
 const router = useRouter();
 const user = useUserStore();
 
 const verify = (tokenStr, ekey) => {
-  token = tokenStr;
-  eKey = ekey;
+  token.value = tokenStr;
+  eKey.value = ekey;
+}
+
+const closeDialog = () =>  {
+  apiMsg.value = '';
+  apiErr.value = false;
+  if (pageReload.value) {
+    window.location.reload();
+  }
 }
 
 const getInfo = () => {
-  api.post('/data', { id, token })
-    .then((res) => {
-      switch(res.status) {
-        case 200:
-          if (res.data.status) {
-            user.storeUser(res.data.user);
-            router.push({ name: 'form' });
-          } else {
-            console.log(res.data);
+  api.post('/data', {
+    id: id.value, token: token.value
+  }).then((res) => {
+    switch(res.status) {
+      case 200:
+        if (res.data.status) {
+          user.storeUser(res.data.user);
+          router.push({ name: 'form' });
+        } else {
+          if (res.data.msg == 'Finished') {
+            apiMsg.value = '您已經完成流向調查問卷的填寫，無需再次填寫！';
+            apiErr.value = true;
+            pageReload.value = true;
           }
-          break;
-        default:
-          console.log("Something went wrong...");
-          console.log(res);
-          break;
-      }
-    });
+        }
+        break;
+      default:
+        console.log(res.status);
+        console.log(res.data);
+    }
+  }).catch((err) => {
+    let res = err.response;
+    switch(res.status) {
+      case 400:
+        if (res.data.msg == 'CaptchaNotFound') {
+          apiMsg.value = '請勾選hCaptcha驗證後，再次進行填寫！';
+          apiErr.value = true;
+        }
+        break;
+      case 404:
+        if (res.data.msg == 'NotFound') {
+          apiMsg.value = '您所輸入的學號無效，請重新輸入後，再嘗試一次！';
+          apiErr.value = true;
+          pageReload.value = true;
+        }
+      default:
+        console.log("Something went wrong...");
+        console.log(res);
+        break;
+    }
+  });
 }
 </script>
 
@@ -53,7 +99,7 @@ const getInfo = () => {
 .infobox {
   position: relative;
   background: #ffffff;
-  max-width: 300px;
+  max-width: 360px;
   padding: 30px;
   border-radius: 20px;
   text-align: center;
@@ -61,6 +107,7 @@ const getInfo = () => {
 
 h1 {
   margin-top: 0px;
+  margin-bottom: 20px;
 }
 
 .thumbnail {

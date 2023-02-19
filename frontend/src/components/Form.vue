@@ -3,7 +3,7 @@
     <h1>雲科大資管系 畢業生流向問卷調查</h1>
     <br><br>
     <!-- 表單主體 -->
-    <form class="form" @submit.prevent>
+    <form class="form" @submit.prevent="submitForm">
       <!-- 表單第一列：學號 -->
       <div class="form-field">
         <label>學號</label>
@@ -64,9 +64,9 @@
 
       <!-- 表單第七列：FB帳號 -->
       <div class="form-field">
-        <label>Facebook帳號 *</label>
+        <label>Facebook帳號(暱稱) *</label>
         <br><br>
-        <input required type="text" class="form-control" v-model="fbName" placeholder="請輸入您的Facebook帳號">
+        <input required type="text" class="form-control" v-model="fbName" placeholder="請輸入您的Facebook帳號(暱稱)">
         <br><br><br>
       </div>
 
@@ -145,13 +145,28 @@
       </div>
     </form>
   </div>
+  <v-dialog v-model="apiErr" persistent width="600">
+    <v-card>
+      <v-card-text>
+        {{ apiMsg }}
+      </v-card-text>
+      <v-card-actions>
+        <v-btn color="primary" block @click="closeDialog">關閉</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup>
+import api from '@/axios';
+import router from '@/router';
 import { useUserStore } from '@/store/userStore';
 import { ref } from 'vue';
 
 const user = useUserStore();
+const apiErr = ref(false);
+const apiMsg = ref('');
+const redirect = ref(false);
 
 const sex = ref('');
 let schoolMail = user.ID.toLowerCase() + "@yuntech.edu.tw";
@@ -178,6 +193,63 @@ const resetForm = () => {
   currState.value = '就業';
   detailOne.value = '';
   detailTwo.value = '';
+}
+
+const closeDialog = () =>  {
+  apiMsg.value = '';
+  apiErr.value = false;
+  router.push({ name: 'home' });
+}
+
+const submitForm = () => {
+  api.post('/data/save', {
+    id: user.ID,
+    sex: sex.value,
+    eduType: user.Education_type,
+    schoolMail: schoolMail,
+    otherMail: personalMail.value,
+    fbid: fbName.value,
+    phone: phoneNo.value,
+    address: address.value,
+    teacher: teacher.value,
+    status: currState.value,
+    statusDetail: `${detailOne.value}|${detailTwo.value}`
+  }).then((res) => {
+    switch(res.status) {
+      case 200:
+        if (res.data.status) {
+          router.push({ name: 'done' });
+        } else {
+          if (res.data.msg == 'Finished') {
+            apiMsg.value = '此學號已經完成填寫，若有疑惑，請聯絡資管系辦詢問。';
+            apiErr.value = true;
+          }
+          if (res.data.msg == 'NotFound') {
+            apiMsg.value = '未找到此學號，若有疑惑，請聯絡資管系辦詢問。';
+            apiErr.value = true;
+          }
+        }
+        break;
+      default:
+        console.log("Something went wrong...");
+        console.log(res);
+        break;
+    }
+  }).catch((err) => {
+    let res = err.response;
+    switch(res.status) {
+      case 500:
+        if (res.data.msg == 'StoreError') {
+          apiMsg.value = '在儲存您的資料時發生錯誤，請聯絡資管系辦詢問！';
+          apiErr.value = true;
+        }
+        break;
+      default:
+        console.log("Something went wrong...");
+        console.log(res);
+        break;
+    }
+  });
 }
 </script>
 

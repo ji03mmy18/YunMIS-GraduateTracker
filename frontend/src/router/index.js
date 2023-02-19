@@ -16,6 +16,12 @@ const routes = [
     meta: { title: titleFormat('Form') }
   },
   {
+    path: '/done',
+    name: 'done',
+    component: () => import('@/components/Done.vue'),
+    meta: { title: titleFormat('Done') }
+  },
+  {
     path: '/test',
     name: 'main',
     component: () => import('@/components/HelloWorld.vue'),

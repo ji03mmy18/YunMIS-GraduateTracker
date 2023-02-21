@@ -2,13 +2,13 @@ let express = require('express');
 let router = express.Router();
 
 let { pwHash, permList } = require('../misc/tool');
-let { auth, admin } = require('../misc/middleware');
+let { auth, admin, Captcha } = require('../misc/middleware');
 let queryRouter = require('./mgmt/query');
 let batchRouter = require('./mgmt/batch');
 let userRouter = require('./mgmt/user');
 
 // 管理員登入
-router.post('/login', async (req, res, next) => {
+router.post('/login', Captcha, async (req, res, next) => {
   let { user, pass } = req.body;
   let conn = await req.dbPool.getConnection();
 
@@ -26,6 +26,7 @@ router.post('/login', async (req, res, next) => {
     req.session.nick = rows[0].Nick;
     req.session.perm = permList(rows[0].PermCreate, rows[0].PermRead, rows[0].PermUpdate, rows[0].PermDelete);
     req.session.deletable = rows[0].Deletable;
+    req.session.save();
     res.status(200).json({ status: true, msg: 'LoggedIn' });
     return;
   } finally {

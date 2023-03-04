@@ -63,12 +63,31 @@ const getInfo = () => {
 }
 
 const managerReq = () => {
-  console.log(account.value, passwd.value);
+  api.post('/manage/login', {
+    user: account.value,
+    pass: passwd.value,
+    token: token.value,
+  }).then((res) => {
+    switch(res.status) {
+      case 200:
+        if (res.data.status) {
+          router.push({ name: 'mgmtHome' });
+        }
+        break;
+      default:
+        console.log(res.data);
+    }
+  }).catch((err) => {
+    let res = err.response;
+    console.log(err);
+    console.log(res);
+  });
 }
 
 const studentReq = () => {
   api.post('/data', {
-    id: id.value, token: token.value
+    id: id.value,
+    token: token.value,
   }).then((res) => {
     switch(res.status) {
       case 200:

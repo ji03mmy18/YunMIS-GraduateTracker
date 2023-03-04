@@ -258,6 +258,7 @@ const submitForm = () => {
   position: relative;
   background: #ffffff;
   max-width: 600px;
+  margin: 2rem;
   padding: 30px;
   border-radius: 20px;
   text-align: start;

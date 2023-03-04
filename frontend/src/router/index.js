@@ -6,26 +6,43 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: () => import('@/components/Home.vue'),
+    component: () => import('@/views/Home.vue'),
     meta: { title: titleFormat('Home') }
   },
   {
     path: '/form',
     name: 'form',
-    component: () => import('@/components/Form.vue'),
+    component: () => import('@/views/Form.vue'),
     meta: { title: titleFormat('Form') }
   },
   {
     path: '/done',
     name: 'done',
-    component: () => import('@/components/Done.vue'),
+    component: () => import('@/views/Done.vue'),
     meta: { title: titleFormat('Done') }
   },
   {
     path: '/manage',
     name: 'manage',
-    component: () => import('@/components/Manage.vue'),
-    meta: { title: titleFormat('Manage') }
+    component: () => import('@/views/Manage.vue'),
+    meta: { title: titleFormat('Manage') },
+    children: [
+      {
+        path: '',
+        name: 'mgmtHome',
+        component: () => import('@/views/mgmtCmpt/Home.vue')
+      },
+      {
+        path: 'query',
+        name: 'dataQuery',
+        component: () => import('@/views/mgmtCmpt/DataQuery.vue')
+      },
+      {
+        path: 'batch',
+        name: 'dataBatch',
+        component: () => import('@/views/mgmtCmpt/DataBatch.vue')
+      }
+    ]
   }
 ]
 

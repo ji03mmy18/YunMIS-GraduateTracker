@@ -4,11 +4,13 @@
       <template v-slot:prepend>
         <v-app-bar-nav-icon @click.stop="trigDrawer"></v-app-bar-nav-icon>
       </template>
-      <v-app-bar-title style="text-align: start;">雲科大資管系 流向調查系統</v-app-bar-title>
+      <v-app-bar-title style="text-align: start; cursor: pointer;" @click="clearDrawer">
+        雲科大資管系 流向調查系統
+      </v-app-bar-title>
       <v-spacer></v-spacer>
       <v-btn prepend-icon="$mdi-logout" @click="userLogout">登出</v-btn>
     </v-app-bar>
-    <v-navigation-drawer v-model="drawerOpen" expand-on-hover rail style="text-align: start;">
+    <v-navigation-drawer v-model="drawerOpen" style="text-align: start;">
       <v-list>
         <v-list-item title="測試人員" subtitle="test">
           <template v-slot:prepend>
@@ -18,9 +20,8 @@
           </template>
         </v-list-item>
       </v-list>
-
       <v-divider></v-divider>
-      <v-list nav>
+      <v-list nav v-model:selected="drawerSelected">
         <v-list-group value="DataManagement">
           <template v-slot:activator="{ props }">
             <v-list-item
@@ -46,6 +47,14 @@
               title="帳號管理"
             ></v-list-item>
           </template>
+          <v-list-item
+            v-for="item in drawerAccountOptions"
+            :key="item.ico"
+            :title="item.title"
+            :prepend-icon="item.ico"
+            :value="item.title"
+            @click="router.push({ name: item.route })"
+          ></v-list-item>
         </v-list-group>
       </v-list>
     </v-navigation-drawer>
@@ -78,6 +87,7 @@ const router = useRouter();
 const api = inject('api');
 
 const drawerOpen = ref(true);
+const drawerSelected = ref(null);
 const drawerDataOptions = ref([{
   ico: '$mdi-accSearch',
   title: '學生查詢',
@@ -86,7 +96,20 @@ const drawerDataOptions = ref([{
   ico: '$mdi-dbImport',
   title: '批次操作',
   route: 'dataBatch'
-}])
+}, {
+  ico: '$mdi-archive',
+  title: '統計資訊',
+  route: 'dataStats'
+}]);
+const drawerAccountOptions = ref([{
+  ico:  '$mdi-pencil',
+  title: '帳號操作',
+  route: 'accManage'
+}, {
+  ico:  '$mdi-boomGate',
+  title: '帳號權限',
+  route: 'accPerms'
+}]);
 const footerIcon = ref([{
   ico: '$mdi-github',
   url: 'https://github.com/ji03mmy18/YunMIS-GraduateTracker/',
@@ -96,6 +119,10 @@ const footerIcon = ref([{
 }]);
 
 const trigDrawer = () => drawerOpen.value = !drawerOpen.value;
+const clearDrawer = () => {
+  router.push({ name: 'mgmtHome' });
+  drawerSelected.value = null;
+}
 const userLogout = () => {
   api.get('/manage/logout').then((res) => {
     if (res.status == 200 && res.data.msg == 'LoggedOut') {

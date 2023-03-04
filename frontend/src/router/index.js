@@ -41,6 +41,21 @@ const routes = [
         path: 'batch',
         name: 'dataBatch',
         component: () => import('@/views/mgmtCmpt/DataBatch.vue')
+      },
+      {
+        path: 'stats',
+        name: 'dataStats',
+        component: () => import('@/views/mgmtCmpt/DataStats.vue')
+      },
+      {
+        path: 'account',
+        name: 'accManage',
+        component: () => import('@/views/mgmtCmpt/AccManage.vue')
+      },
+      {
+        path: 'perms',
+        name: 'accPerms',
+        component: () => import('@/views/mgmtCmpt/AccPerms.vue')
       }
     ]
   }

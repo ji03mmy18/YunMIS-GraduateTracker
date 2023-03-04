@@ -1,7 +1,7 @@
 import { createVuetify } from 'vuetify';
 import { aliases, mdi } from 'vuetify/iconsets/mdi-svg';
 import {
-  mdiLogout, mdiGithub, mdiGmail,
+  mdiLogout, mdiGithub, mdiGmail, mdiArchive, mdiPencil, mdiBoomGate,
   mdiDatabaseEditOutline, mdiDatabaseImport,
   mdiAccountEditOutline, mdiAccountSearch,
 } from '@mdi/js';
@@ -13,9 +13,12 @@ const vuetify = createVuetify({
     defaultSet: 'mdi',
     aliases: {
       ...aliases,
-      "mdi-logout": mdiLogout,
+      "mdi-archive": mdiArchive,
+      "mdi-boomGate": mdiBoomGate,
       "mdi-github": mdiGithub,
       "mdi-gmail": mdiGmail,
+      "mdi-logout": mdiLogout,
+      "mdi-pencil": mdiPencil,
       "mdi-dbEditOut": mdiDatabaseEditOutline,
       "mdi-dbImport": mdiDatabaseImport,
       "mdi-accEditOut": mdiAccountEditOutline,

@@ -19,10 +19,11 @@ router.post('/import', permCheck('C'), fileUpload, async (req, res, next) => {
 
     for await(const row of parser) {
       let result = await conn.query("INSERT INTO graduate(ID, Name, Education_type, Year)\
-        VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE ID = ?, Name = ?, Education_type = ?, Year = ?",
+        VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE Name = ?, Education_type = ?, Year = ?",
         [row['ID'], row['Name'], row['eduType'], row['Year'],
-        row['ID'], row['Name'], row['eduType'], row['Year']]
+        row['Name'], row['eduType'], row['Year']]
       );
+      console.log(row, result);
       // 檢查是否有正確存入
       if (result.affectedRows == 0) {
         keeped.push(row['ID']);
@@ -83,7 +84,7 @@ router.get('/export', permCheck('R'), async (req, res, next) => {
     });
 
     // 設定標頭及回傳下載內容
-    res.setHeader('Content-disposition', `attachment; filename=Graduate${year}.csv`);
+    res.setHeader('Content-disposition', `attachment; filename=Graduate${year === '%' ? 'All' : year}.csv`);
     res.setHeader('Content-type', 'text/csv');
     csv.end().pipe(res);
     return;

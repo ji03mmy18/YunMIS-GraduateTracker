@@ -83,18 +83,19 @@ router.post('', permCheck('C'), async (req, res, next) => {
 router.patch('/:id', permCheck('U'), async (req, res, next) => {
   let id = req.params.id;
   let {
-    sex, eduType, schoolMail,
+    name, sex, eduType, schoolMail,
     otherMail, fbid, phone, address,
-    teacher, status, statusDetail
+    teacher, status, statusDetail,
+    year, complete
   } = req.body;
   let conn = await req.dbPool.getConnection();
 
   try {
     // 寫入資料
     const result = await conn.query(
-      "UPDATE graduate SET Sex = ?, Education_type = ?, School_Email = ?, Email = ?, Facebook_Email = ?, Phone = ?, \
-      Address = ?, Teacher = ?, Status = ?, Status_detail = ?, Complete = 'Y' WHERE ID = ?",
-      [sex, eduType, schoolMail, otherMail, fbid, phone, address, teacher, status, statusDetail, id]
+      "UPDATE graduate SET Name = ?, Sex = ?, Education_type = ?, School_Email = ?, Email = ?, Facebook_Email = ?, Phone = ?, \
+      Address = ?, Teacher = ?, Status = ?, Status_detail = ?, Year = ?, Complete = ? WHERE ID = ?",
+      [name, sex, eduType, schoolMail, otherMail, fbid, phone, address, teacher, status, statusDetail, year, complete, id]
     );
     if (result.affectedRows != 1) {
       res.status(500).json({ status: false, msg: 'StoreError' });

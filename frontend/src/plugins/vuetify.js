@@ -3,8 +3,9 @@ import { aliases, mdi } from 'vuetify/iconsets/mdi-svg';
 import {
   mdiLogout, mdiGithub, mdiGmail, mdiArchive, mdiPencil, mdiBoomGate,
   mdiDatabaseEditOutline, mdiDatabaseImport,
-  mdiAccountEditOutline, mdiAccountSearch,
+  mdiAccountEditOutline, mdiAccountSearch, mdiFilter, mdiMagnify,
 } from '@mdi/js';
+import { VDataTable } from 'vuetify/labs/VDataTable';
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 
@@ -15,9 +16,11 @@ const vuetify = createVuetify({
       ...aliases,
       "mdi-archive": mdiArchive,
       "mdi-boomGate": mdiBoomGate,
+      "mdi-filter": mdiFilter,
       "mdi-github": mdiGithub,
       "mdi-gmail": mdiGmail,
       "mdi-logout": mdiLogout,
+      "mdi-magnify": mdiMagnify,
       "mdi-pencil": mdiPencil,
       "mdi-dbEditOut": mdiDatabaseEditOutline,
       "mdi-dbImport": mdiDatabaseImport,
@@ -26,7 +29,10 @@ const vuetify = createVuetify({
     },
     sets: { mdi }
   },
-  components,
+  components: {
+    ...components,
+    VDataTable
+  },
   directives
 });
 

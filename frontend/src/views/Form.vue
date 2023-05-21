@@ -158,12 +158,12 @@
 </template>
 
 <script setup>
-import api from '@/axios';
+import { ref, inject } from 'vue';
 import router from '@/router';
 import { useUserStore } from '@/store/userStore';
-import { ref } from 'vue';
 
 const user = useUserStore();
+const api = inject('api')
 const apiErr = ref(false);
 const apiMsg = ref('');
 const redirect = ref(false);

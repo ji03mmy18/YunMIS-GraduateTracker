@@ -135,4 +135,7 @@ const userLogout = () => {
 </script>
 
 <style scoped>
+main {
+  width: 100vw;
+}
 </style>

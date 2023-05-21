@@ -65,29 +65,29 @@
   </v-container>
   <!-- 新增學生對話框 -->
   <v-dialog v-model="newStudentDialog" width="40%">
-    <v-form ref="newStudentForm">
+    <v-form ref="newStudentForm" v-model="newStudentValid" @submit.prevent="newStudentSubmit">
       <v-card title="新增單筆學生">
         <v-card-text>
           <v-text-field
             label="學生學號"
             v-model="newStudentFormData.id"
-            required
+            :rules="ruleStudentID"
           ></v-text-field>
           <v-text-field
             label="學生姓名"
             v-model="newStudentFormData.name"
-            required
+            :rules="ruleNotBlank"
           ></v-text-field>
           <v-select
             label="教育類型"
             :items="['四技', '二技', '碩士', '博士']"
             v-model="newStudentFormData.eduType"
-            required
+            :rules="ruleNotSelect"
           ></v-select>
           <v-text-field
             label="畢業年份"
             v-model="newStudentFormData.year"
-            required
+            :rules="ruleYear"
           ></v-text-field>
         </v-card-text>
         <v-card-actions>
@@ -99,7 +99,8 @@
           <v-spacer></v-spacer>
           <v-btn
             width="30%"
-            @click="newStudentSubmit"
+            type="submit"
+            :disabled="!newStudentValid"
           >儲存
           </v-btn>
         </v-card-actions>
@@ -108,7 +109,7 @@
   </v-dialog>
   <!-- 修改年份對話框 -->
   <v-dialog v-model="yearSelectDialog" width="30%">
-    <v-form ref="yearSelectForm">
+    <v-form ref="yearSelectForm" v-model="yearSelectValid" @submit.prevent="yearSelectSubmit">
       <v-card title="切換年份">
         <v-card-text>
           <v-radio-group v-model="yearSelectFormData.type" @change="yearFieldCheck">
@@ -141,7 +142,8 @@
           <v-spacer></v-spacer>
           <v-btn
             width="30%"
-            @click="yearSelectSubmit"
+            type="submit"
+            :disabled="!yearSelectValid"
           >送出
           </v-btn>
         </v-card-actions>
@@ -273,7 +275,7 @@
     </v-card>
   </v-dialog>
   <!-- 新增成功通知 -->
-  <v-snackbar v-model="operationNotify" color="green" timeout="1500">
+  <v-snackbar v-model="operationNotify" color="success" timeout="1500">
     <v-alert
       v-model="operationNotify"
       type="success"
@@ -295,6 +297,8 @@ const studentInfoDialog = ref(false);
 const infoDeleteDialog = ref(false);
 const newStudentForm = ref(null);
 const yearSelectForm = ref(null);
+const newStudentValid = ref(false);
+const yearSelectValid = ref(false);
 const studentInfoForm = ref(null);
 const operationNotify = ref(false);
 const newStudentFormData = ref({
@@ -304,8 +308,8 @@ const newStudentFormData = ref({
   year: '',
 });
 const yearSelectFormData = ref({
-  type: 1,
-  year: new Date().getFullYear()
+  type: '1',
+  year: new Date().getFullYear().toString()
 });
 const studentStatusDetail = ref({
   detailOne: '',
@@ -343,7 +347,16 @@ const tableHeader = [
 
 // 欄位限制
 const ruleYear = [
-  (v) => v.length == 4 || '年份長度必須為4碼',
+  (v) => v && v.length == 4 || '年份長度必須為4碼',
+]
+const ruleStudentID = [
+  (v) => v && v.length == 9 || '學號長度必須為9碼',
+]
+const ruleNotBlank = [
+  (v) => v && !!v.trim() || '欄位不可為空',
+]
+const ruleNotSelect = [
+  (v) => !!v || '必須選擇其中一項',
 ]
 
 onMounted(() => {

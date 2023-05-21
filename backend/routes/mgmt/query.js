@@ -15,12 +15,12 @@ router.get('', permCheck('R'), async (req, res, next) => {
     let rows;
     // 三種模式，whole為全部資料，null為教育類型無預設值，最後一種為一般查詢
     if (mode == 'whole') {
-      rows = await conn.query("SELECT ID, Name, Complete FROM graduate");
+      rows = await conn.query("SELECT ID, Name, Education_type, Complete FROM graduate");
     } else if (mode == 'null') {
-      rows = await conn.query("SELECT ID, Name, Complete FROM graduate WHERE Education_type IS NULL");
+      rows = await conn.query("SELECT ID, Name, Education_type, Complete FROM graduate WHERE Education_type IS NULL");
     } else {
       rows = await conn.query(
-        "SELECT ID, Name, Complete FROM graduate WHERE \
+        "SELECT ID, Name, Education_type, Complete FROM graduate WHERE \
         ID LIKE ? AND Year LIKE ? AND Education_type LIKE ? AND Complete LIKE ?",
         [id, year, eduType, complete]
       );
@@ -63,10 +63,11 @@ router.post('', permCheck('C'), async (req, res, next) => {
   try {
     // 插入新資料
     let result = await conn.query(
-      "INSERT INTO graduate(ID, Name, Education_type, Year) VALUES (?, ?, ?, ?)",
-      [id, name, eduType, year]
+      "INSERT INTO graduate(ID, Name, Education_type, Year) VALUES (?, ?, ?, ?)\
+      ON DUPLICATE KEY UPDATE Name=?, Education_type=?, Year=?",
+      [id, name, eduType, year, name, eduType, year]
     );
-    if (result.affectedRows != 1) {
+    if (result.affectedRows == 0) {
       res.status(500).json({ status: false, msg: 'CreateError' });
       return;
     }

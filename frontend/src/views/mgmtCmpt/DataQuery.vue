@@ -51,6 +51,26 @@
             label="博士"
             value="博士"
           ></v-radio>
+          <v-radio
+            label="碩士在職專班"
+            value="碩士在職專班"
+          ></v-radio>
+          <v-radio
+            label="香港二技專班"
+            value="香港二技專班"
+          ></v-radio>
+          <v-radio
+            label="數位碩在專班"
+            value="數位碩士在職專班"
+          ></v-radio>
+          <v-radio
+            label="其他"
+            value="其他"
+          ></v-radio>
+          <v-radio
+            label="未設定"
+            :value="null"
+          ></v-radio>
         </v-radio-group>
       </div>
       <v-divider vertical></v-divider>
@@ -80,7 +100,7 @@
           ></v-text-field>
           <v-select
             label="教育類型"
-            :items="['四技', '二技', '碩士', '博士']"
+            :items="['四技', '二技', '碩士', '博士', '碩士在職專班', '香港二技專班', '數位碩士在職專班', '其他']"
             v-model="newStudentFormData.eduType"
             :rules="ruleNotSelect"
           ></v-select>
@@ -173,7 +193,7 @@
           <v-select
             label="教育類型"
             v-model="studentInfoFormData.eduType"
-            :items="['四技', '二技', '碩士', '博士']"
+            :items="['四技', '二技', '碩士', '博士', '碩士在職專班', '香港二技專班', '數位碩士在職專班', '其他']"
           ></v-select>
           <v-text-field
             label="學校信箱"

@@ -30,9 +30,10 @@
 import { inject, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
-import { useUserStore } from '@/store/userStore';
+import { useUserStore, useManagerStore } from '@/store';
 
 const user = useUserStore();
+const manager = useManagerStore();
 const router = useRouter();
 const api = inject('api');
 
@@ -71,6 +72,7 @@ const managerReq = () => {
     switch(res.status) {
       case 200:
         if (res.data.status) {
+          manager.storeManager(res.data.user);
           router.push({ name: 'mgmtHome' });
         }
         break;

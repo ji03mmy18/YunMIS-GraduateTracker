@@ -12,10 +12,10 @@
     </v-app-bar>
     <v-navigation-drawer v-model="drawerOpen" style="text-align: start;">
       <v-list>
-        <v-list-item title="測試人員" subtitle="test">
+        <v-list-item :title="manager.Nick !== '' ? manager.Nick : manager.User" :subtitle="manager.User">
           <template v-slot:prepend>
             <v-avatar color="#40E0D0">
-              <span class="text-h6">測</span>
+              <span class="text-h6">{{ manager.Nick !== '' ? manager.Nick[0] : manager.User[0] }}</span>
             </v-avatar>
           </template>
         </v-list-item>
@@ -39,23 +39,25 @@
             @click="router.push({ name: item.route })"
           ></v-list-item>
         </v-list-group>
-        <v-list-group value="AccountManagement">
-          <template v-slot:activator="{ props }">
+        <div v-if="manager.Deletable === 0">
+          <v-list-group value="AccountManagement">
+            <template v-slot:activator="{ props }">
+              <v-list-item
+                v-bind="props"
+                prepend-icon="$mdi-accEditOut"
+                title="帳號管理"
+              ></v-list-item>
+            </template>
             <v-list-item
-              v-bind="props"
-              prepend-icon="$mdi-accEditOut"
-              title="帳號管理"
-            ></v-list-item>
-          </template>
-          <v-list-item
-            v-for="item in drawerAccountOptions"
-            :key="item.ico"
-            :title="item.title"
-            :prepend-icon="item.ico"
-            :value="item.title"
-            @click="router.push({ name: item.route })"
-          ></v-list-item>
-        </v-list-group>
+              v-for="item in drawerAccountOptions"
+              :key="item.ico"
+              :title="item.title"
+              :prepend-icon="item.ico"
+              :value="item.title"
+              @click="router.push({ name: item.route })"
+              ></v-list-item>
+          </v-list-group>
+        </div>
       </v-list>
     </v-navigation-drawer>
     <v-main>
@@ -82,7 +84,9 @@
 <script setup>
 import { inject, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useManagerStore } from '@/store';
 
+const manager = useManagerStore();
 const router = useRouter();
 const api = inject('api');
 

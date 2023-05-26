@@ -302,6 +302,14 @@
       :title="notifyMessage"
     ></v-alert>
   </v-snackbar>
+  <!-- 權限不足通知 -->
+  <v-snackbar v-model="permDenied" color="warning" timeout="1500">
+    <v-alert
+      v-model="permDenied"
+      type="warning"
+      title="權限不足，無法進行操作！"
+    ></v-alert>
+  </v-snackbar>
 </template>
 
 <script setup>
@@ -321,6 +329,7 @@ const newStudentValid = ref(false);
 const yearSelectValid = ref(false);
 const studentInfoForm = ref(null);
 const operationNotify = ref(false);
+const permDenied = ref(false);
 const newStudentFormData = ref({
   id: '',
   name: '',
@@ -540,6 +549,11 @@ const apiErrorHandling = (err) => {
     case 401:
       if(res.data.msg == "NeedLogin") {
         router.push({ name: 'home' });
+      }
+      break;
+    case 403:
+      if(res.data.msg == "PermissionDenied") {
+        permDenied.value = true;
       }
       break;
   }

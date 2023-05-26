@@ -133,11 +133,20 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
+  <!-- 新增成功通知 -->
   <v-snackbar v-model="operationNotify" color="success" timeout="1500">
     <v-alert
       v-model="operationNotify"
       type="success"
       :title="notifyMessage"
+    ></v-alert>
+  </v-snackbar>
+  <!-- 權限不足通知 -->
+  <v-snackbar v-model="permDenied" color="warning" timeout="1500">
+    <v-alert
+      v-model="permDenied"
+      type="warning"
+      title="權限不足，無法進行操作！"
     ></v-alert>
   </v-snackbar>
 </template>
@@ -167,6 +176,7 @@ const uploadSuccessInfo = ref({
 });
 const operationNotify = ref(false);
 const notifyMessage = ref('');
+const permDenied = ref(false);
 
 const ruleYear = [
   (v) => v && v.length == 4 || '年份長度必須為4碼',
@@ -211,6 +221,11 @@ const apiErrorHandling = (err) => {
     case 401:
       if(res.data.msg == "NeedLogin") {
         router.push({ name: 'home' });
+      }
+      break;
+    case 403:
+      if(res.data.msg == "PermissionDenied") {
+        permDenied.value = true;
       }
       break;
   }

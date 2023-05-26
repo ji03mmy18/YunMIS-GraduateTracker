@@ -43,7 +43,34 @@ function exportFilter(source) {
   return { year, header };
 }
 
+// 學生狀態轉換
+function convStatus(status) {
+  switch(status) {
+    case '升學':
+      return 'U';
+    case '就業':
+      return 'W';
+    case '服兵役':
+      return 'M';
+    case '留學':
+      return 'I';
+    case '其他':
+      return 'O';
+  }
+}
+
+// 學生性別轉換
+function convSex(sex) {
+  switch(sex) {
+    case '男':
+      return 'M';
+    case '女':
+      return 'F';
+  }
+}
+
 module.exports = {
   rmEmpty, rmItem, pwHash, permList,
-  queryFilter, exportFilter
+  queryFilter, exportFilter,
+  convStatus, convSex
 };

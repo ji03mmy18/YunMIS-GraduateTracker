@@ -1,8 +1,8 @@
 let express = require('express');
 let router = express.Router();
 
-let { pwHash, permList } = require('../misc/tool');
-let { auth, admin, Captcha } = require('../misc/middleware');
+let { pwHash, permList, convStatus, convSex } = require('../misc/tool');
+let { auth, admin, Captcha, permCheck } = require('../misc/middleware');
 let queryRouter = require('./mgmt/query');
 let batchRouter = require('./mgmt/batch');
 let userRouter = require('./mgmt/user');
@@ -27,7 +27,7 @@ router.post('/login', Captcha, async (req, res, next) => {
     req.session.perm = permList(rows[0].PermCreate, rows[0].PermRead, rows[0].PermUpdate, rows[0].PermDelete);
     req.session.deletable = rows[0].Deletable;
     req.session.save();
-    res.status(200).json({ status: true, msg: 'LoggedIn' });
+    res.status(200).json({ status: true, msg: 'LoggedIn', user: { user: user, nick: rows[0].Nick, deletable: rows[0].Deletable } });
     return;
   } finally {
     conn.end();
@@ -40,6 +40,41 @@ router.get('/logout', async (req, res, next) => {
   req.session.destroy();
   res.status(200).json({ status: true, msg: "LoggedOut" });
   return;
+});
+
+// 學生統計資料
+router.get('/stat', auth, permCheck('R'), async(req, res, next) => {
+  const { year } = req.query;
+  let conn = await req.dbPool.getConnection();
+
+  try {
+
+    let data = [];
+
+    for(const type of ['四技', '二技', '碩士', '博士', '碩士在職專班', '香港二技專班', '數位碩士在職專班', '其他']) {
+      let content = {eduType: type, UM: 0, UF: 0, WM: 0, WF: 0, MM: 0, MF: 0, IM: 0, IF: 0, OM: 0, OF: 0,TM: 0, TF: 0, total: 0};
+      let rows = await conn.query(
+        "SELECT Status, Sex, COUNT(*) AS Count FROM graduate \
+        WHERE Education_type = ? AND Year = ? GROUP BY Status, Sex",
+        [type, year]
+      );
+      rows.forEach((r) => {
+        if(r['Status'] == null && r['Sex'] == null) {
+          content.total += Number(r['Count']);
+        } else {
+          content.total += Number(r['Count']);
+          content[`T${convSex(r['Sex'])}`] += Number(r['Count']);
+          content[`${convStatus(r['Status'])}${convSex(r['Sex'])}`] = Number(r['Count']);
+        }
+      });
+      data.push(content);
+    }
+
+    res.status(200).json({ status: true, data: data });
+    return;
+  } finally {
+    conn.end();
+  }
 });
 
 // 註冊 query 路由

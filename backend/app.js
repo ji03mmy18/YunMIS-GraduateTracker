@@ -24,7 +24,7 @@ app.use(cors({
   methods: ['GET', 'POST', 'PATCH', 'DELETE'],
 }));
 app.use(session({
-  cookie: { maxAge: 600000/*3600000*/ }, // 1小時無效
+  cookie: { maxAge: 3600000 }, // 1小時無效
   store: new memoryStore({
     checkPeriod: 14400000 // 4小時清理
   }),

@@ -9,14 +9,14 @@ services:
   backend:
     build: ./backend/
     environment:
-      - DB_HOST: ''
-      - DB_USER: ''
-      - DB_PASS: ''
-      - DB_NAME: ''
-      - SESS_SECRET: ''
-      - SALT: ''
-      - HCAP_ENABLE: ''
-      - HCAP_SECRET: ''
+      DB_HOST: ''
+      DB_USER: ''
+      DB_PASS: ''
+      DB_NAME: ''
+      SESS_SECRET: ''
+      SALT: ''
+      HCAP_ENABLE: ''
+      HCAP_SECRET: ''
     ports:
       - "127.0.0.1:3000:3000"
     restart: always

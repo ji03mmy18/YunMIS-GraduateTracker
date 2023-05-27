@@ -1,4 +1,4 @@
-FROM node:lts
+FROM node:lts-alpine
 LABEL author="YoMin Su <aaaa1234567891016@gmail.com>"
 
 WORKDIR /app

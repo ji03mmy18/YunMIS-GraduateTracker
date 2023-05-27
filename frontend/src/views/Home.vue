@@ -81,8 +81,18 @@ const managerReq = () => {
     }
   }).catch((err) => {
     let res = err.response;
-    console.log(err);
-    console.log(res);
+    switch(res.status) {
+      case 404:
+        if(res.data.msg == 'NotFound|PassIncorrect') {
+          apiMsg.value = '帳號或密碼錯誤，請重新嘗試！';
+          apiErr.value = true;
+          pageReload.value = true;
+        }
+        break;
+      default:
+        console.log(err);
+        break;
+    }
   });
 }
 

@@ -58,12 +58,6 @@ const routes = [
         component: () => import('@/views/mgmtCmpt/AccPerms.vue')
       }
     ]
-  },
-  {
-    path: '/forbid',
-    name: 'forbid',
-    component: () => import('@/views/Forbid.vue'),
-    meta: { title: titleFormat('Forbid') }
   }
 ]
 

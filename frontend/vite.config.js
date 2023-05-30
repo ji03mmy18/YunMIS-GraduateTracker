@@ -18,5 +18,13 @@ export default defineConfig({
         rewrite: (path) => path.replace('/api', ''),
       }
     }
+  },
+  build: {
+    rollupOptions: {
+      input: {
+        index: './index.html',
+        forbid: './forbid.html',
+      }
+    }
   }
 });

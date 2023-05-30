@@ -11,7 +11,7 @@
       <h1>資管系 流向調查問卷<br>本系統僅限校內填寫！</h1>
       <div class="thumbnail"><img src="/forbid.svg" alt="main page" width="150" height="150"/></div>
       <div class="locateBtn">
-        <button class="mis" onclick="mis">回資管系網</button>
+        <button class="mis" onclick="mis()">回資管系網</button>
       </div>
       <div class="clearfix"></div>
     </div>
@@ -22,6 +22,22 @@
     }
   </script>
   <style>
+    html {
+      max-width: 1280px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    body {
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        place-items: center;
+        min-width: 320px;
+        min-height: 100vh;
+        background-color: rgb(245, 245, 245);
+      }
+
     .infobox {
       position: relative;
       background: #ffffff;

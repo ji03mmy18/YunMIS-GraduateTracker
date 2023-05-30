@@ -1,23 +1,15 @@
 <template>
   <div class="infobox">
-    <h1>資管系 流向調查問卷<br>填寫完成！</h1>
-    <div class="thumbnail"><img src="@/assets/check.svg" alt="main page" width="80" height="80"/></div>
+    <h1>資管系 流向調查問卷<br>本系統僅限校內填寫！</h1>
+    <div class="thumbnail"><img src="@/assets/forbid.svg" alt="main page" width="150" height="150"/></div>
     <div class="locateBtn">
       <button class="mis" @click="mis">回資管系網</button>
-      <button class="main" @click="main">回首頁</button>
     </div>
     <div class="clearfix"></div>
   </div>
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
-
-const main = () => {
-  router.push({ name: 'home' });
-}
 const mis = () => {
   window.location.href = "https://www.mis.yuntech.edu.tw";
 }
@@ -27,7 +19,7 @@ const mis = () => {
 .infobox {
   position: relative;
   background: #ffffff;
-  max-width: 360px;
+  max-width: 400px;
   padding: 30px;
   border-radius: 20px;
   text-align: center;
@@ -39,11 +31,10 @@ h1 {
 }
 
 .thumbnail {
-  background: #ed4545;
+  background: #000000;
   width: 150px;
   height: 150px;
   margin: 0px auto 30px auto;
-  padding-top: 35px;
   border-radius: 100%;
   box-sizing: border-box;
 }
@@ -69,12 +60,9 @@ button:focus-visible {
 }
 
 .locateBtn .mis{
-  float: left;
-}
-
-.locateBtn .main {
   float: right;
 }
+
 
 .clearfix {
   clear: both;

@@ -38,7 +38,7 @@
           <option value="二技">二技</option>
           <option value="碩士">碩士</option>
           <option value="博士">博士</option>
-          <option value="碩士在職專班">碩士在謢專班</option>
+          <option value="碩士在職專班">碩士在職專班</option>
           <option value="香港二技專班">香港二技專班</option>
           <option value="數位碩士在職專班">數位碩士在職專班</option>
           <option value="其他">其他</option>

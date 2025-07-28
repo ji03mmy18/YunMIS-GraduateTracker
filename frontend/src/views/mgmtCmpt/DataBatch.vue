@@ -13,7 +13,7 @@
           <v-card-text>
             <v-card title="使用說明" variant="outlined" class="ma-4" style="text-align: start;">
               <v-card-text>
-                <p>資料匯入功能在使用上並不複雜，請先下載範例檔案，該檔案是個副檔名為CSV的文件，可以使用任何你喜歡的編輯工具(e.g., Notepad++, VSCode)開啟！</p>
+                <p>要使用資料匯入功能請先下載範例檔案，可以選擇副檔名為CSV或XLSX的文件，使用任何你喜歡的編輯工具(e.g., Notepad++, VSCode, Excel)開啟！</p>
                 <br>
                 <p>當開啟後，可以注意到第一行的標題『ID, Name, eduType, Year』，不需要將其刪除，請直接換行後開始填寫，細節可參考範例檔中的範例資料。</p>
                 <br>
@@ -25,7 +25,14 @@
                   variant="tonal"
                   :href="exampleCSV"
                   download
-                >下載範例檔
+                >下載範例檔(csv)
+                </v-btn>
+                <v-btn
+                  color="info"
+                  variant="tonal"
+                  :href="exampleXLSX"
+                  download
+                >下載範例檔(xlsx)
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -34,7 +41,7 @@
                 label="畢業生列表檔案"
                 density="compact"
                 variant="outlined"
-                accept=".csv"
+                accept=".csv,.xlsx,.xls"
                 show-size
                 v-model="batchUploadFormData.studentList"
               >
@@ -158,6 +165,10 @@ import { ref, inject } from 'vue';
 const api = inject('api');
 const exampleCSV = new URL(
   '@/assets/example.csv',
+  import.meta.url
+).href;
+const exampleXLSX = new URL(
+  '@/assets/example.xlsx',
   import.meta.url
 ).href;
 const batchUploadFormData = ref({

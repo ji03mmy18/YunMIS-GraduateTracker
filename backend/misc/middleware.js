@@ -4,9 +4,11 @@ let upload = multer({
   fileFilter: (req, file, cb) => {
     const ext = path.extname(file.originalname).toLowerCase();
     const mime = file.mimetype;
-    (ext !== '.csv' || mime !== 'text/csv') ?
-      cb(new Error("FileTypeMismatch"), false) :
-      cb(null, true);
+    (ext == '.csv' && mime == 'text/csv') ||
+      (ext == '.xls' && mime == 'application/vnd.ms-excel') ||
+      (ext == '.xlsx' && mime == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') ?
+      cb(null, true) :
+      cb(new Error("FileTypeMismatch"), false);
   }
 });
 let { body } = require('express-validator');

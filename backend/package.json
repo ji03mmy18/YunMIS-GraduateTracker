@@ -19,6 +19,8 @@
     "mariadb": "^3.0.2",
     "memorystore": "^1.6.7",
     "morgan": "~1.9.1",
-    "multer": "^1.4.5-lts.1"
-  }
+    "multer": "^1.4.5-lts.1",
+    "xlsx": "^0.18.5"
+  },
+  "packageManager": "yarn@1.22.21+sha1.1959a18351b811cdeedbd484a8f86c3cc3bbaf72"
 }

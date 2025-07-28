@@ -1,6 +1,8 @@
 let express = require('express');
-let router = express.Router({mergeParams: true});
+let path = require('path');
+let router = express.Router({ mergeParams: true });
 let { parse, stringify } = require('csv');
+let XLSX = require('xlsx');
 
 let { exportFilter } = require('../../misc/tool');
 let { permCheck, fileUpload } = require('../../misc/middleware');
@@ -14,23 +16,49 @@ router.post('/import', permCheck('C'), fileUpload, async (req, res, next) => {
   let inserted = [];
 
   try {
-    //透過 csv-parse 將資料轉換成物件
-    let parser = parse(req.file.buffer, { delimiter: ',', columns: true });
+    const ext = path.extname(req.file.originalname).toLocaleLowerCase();
+    if (ext == '.csv') {
+      //透過 csv-parse 將資料轉換成物件
+      let parser = parse(req.file.buffer, { delimiter: ',', columns: true });
 
-    for await(const row of parser) {
-      let result = await conn.query("INSERT INTO graduate(ID, Name, Education_type, Year)\
+      for await (const row of parser) {
+        let result = await conn.query("INSERT INTO graduate(ID, Name, Education_type, Year)\
         VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE Name = ?, Education_type = ?, Year = ?",
-        [row['ID'], row['Name'], row['eduType'], row['Year'],
-        row['Name'], row['eduType'], row['Year']]
-      );
-      console.log(row, result);
-      // 檢查是否有正確存入
-      if (result.affectedRows == 0) {
-        keeped.push(row['ID']);
-      } else if (result.affectedRows == 1) {
-        inserted.push(row['ID']);
-      } else if (result.affectedRows == 2) {
-        updated.push(row['ID']);
+          [row['ID'], row['Name'], row['eduType'], row['Year'],
+          row['Name'], row['eduType'], row['Year']]
+        );
+        console.log(row, result);
+        // 檢查是否有正確存入
+        if (result.affectedRows == 0) {
+          keeped.push(row['ID']);
+        } else if (result.affectedRows == 1) {
+          inserted.push(row['ID']);
+        } else if (result.affectedRows == 2) {
+          updated.push(row['ID']);
+        }
+      }
+    }
+    if (ext == '.xlsx' || ext == '.xls') {
+      const workbook = XLSX.read(req.file.buffer, { type: 'buffer' });
+      const sheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[sheetName];
+
+      const rows = XLSX.utils.sheet_to_json(worksheet);
+      for await (const row of rows) {
+        let result = await conn.query("INSERT INTO graduate(ID, Name, Education_type, Year)\
+        VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE Name = ?, Education_type = ?, Year = ?",
+          [row['ID'], row['Name'], row['eduType'], row['Year'],
+          row['Name'], row['eduType'], row['Year']]
+        );
+        console.log(row, result);
+        // 檢查是否有正確存入
+        if (result.affectedRows == 0) {
+          keeped.push(row['ID']);
+        } else if (result.affectedRows == 1) {
+          inserted.push(row['ID']);
+        } else if (result.affectedRows == 2) {
+          updated.push(row['ID']);
+        }
       }
     }
 
@@ -74,9 +102,9 @@ router.get('/export', permCheck('R'), async (req, res, next) => {
     let csv = stringify({
       header,
       columns: [
-        'ID','Name','Sex','Education_type','School_Email',
-        'Email','Facebook_Email','Phone','Address','Teacher',
-        'Status','Status_detail','Year','Complete'
+        'ID', 'Name', 'Sex', 'Education_type', 'School_Email',
+        'Email', 'Facebook_Email', 'Phone', 'Address', 'Teacher',
+        'Status', 'Status_detail', 'Year', 'Complete'
       ]
     });
     rows.forEach((row) => {

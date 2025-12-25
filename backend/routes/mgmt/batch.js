@@ -2,7 +2,7 @@ let express = require('express');
 let path = require('path');
 let router = express.Router({ mergeParams: true });
 let { parse, stringify } = require('csv');
-let XLSX = require('xlsx');
+let XLSX = require('@e965/xlsx');
 
 let { exportFilter } = require('../../misc/tool');
 let { permCheck, fileUpload } = require('../../misc/middleware');

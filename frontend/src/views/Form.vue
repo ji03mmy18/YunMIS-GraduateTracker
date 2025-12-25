@@ -1,12 +1,13 @@
 <template>
   <div class="infobox">
     <h1>雲科大資管系 畢業生流向問卷調查</h1>
+    <h2>YunTech Dept of Information Management Graduate Career Outcomes Survey</h2>
     <br><br>
     <!-- 表單主體 -->
     <form class="form" @submit.prevent="submitForm">
       <!-- 表單第一列：學號 -->
       <div class="form-field">
-        <label>學號</label>
+        <label>學號 / Student ID</label>
         <br><br>
         <input readonly type="text" v-model="user.ID" class="form-control" id="sid">
         <br><br><br>
@@ -14,7 +15,7 @@
 
       <!-- 表單第二列：姓名 -->
       <div class="form-field">
-        <label>姓名</label>
+        <label>姓名 / Name</label>
         <br><br>
         <input readonly type="text" v-model="user.Name" class="form-control" id="sname">
         <br><br><br>
@@ -22,33 +23,33 @@
 
       <!-- 表單第三列：性別 -->
       <div class="form-field">
-        <label>性別 *</label>
+        <label>性別 / Gender *</label>
         <br><br>
-        <label class="labelR"><input required class="option-input" type="radio" name="sex" v-model="sex" value="男">男性</label>
-        <label class="labelR"><input required class="option-input" type="radio" name="sex" v-model="sex" value="女">女性</label>
+        <label class="labelR"><input required class="option-input" type="radio" name="sex" v-model="sex" value="男">男性 / Male</label>
+        <label class="labelR"><input required class="option-input" type="radio" name="sex" v-model="sex" value="女">女性 / Female</label>
         <br><br><br>
       </div>
 
       <!-- 表單第四列：學位 -->
       <div class="form-field">
-        <label>就學類型 *</label>
+        <label>就學類型 / Type of Study *</label>
         <br><br>
         <select required class="select-style" v-model="user.Education_type" id="sedutype">
-          <option value="四技">四技</option>
-          <option value="二技">二技</option>
-          <option value="碩士">碩士</option>
-          <option value="博士">博士</option>
-          <option value="碩士在職專班">碩士在職專班</option>
-          <option value="香港二技專班">香港二技專班</option>
-          <option value="數位碩士在職專班">數位碩士在職專班</option>
-          <option value="其他">其他</option>
+          <option value="四技">四技 / Four-Year Technical Program</option>
+          <option value="二技">二技 / Two-Year Technical Program</option>
+          <option value="碩士">碩士 / Master's Program</option>
+          <option value="博士">博士 / Doctoral Program</option>
+          <option value="碩士在職專班">碩士在職專班 / In-Service Master's Program</option>
+          <option value="香港二技專班">香港二技專班 / In-Service Master's Program</option>
+          <option value="數位碩士在職專班">數位碩士在職專班 / In-Service Master's Program in Digital Technology</option>
+          <option value="其他">其他 / Other</option>
         </select>
         <br><br><br>
       </div>
 
       <!-- 表單第五列：學校信箱 -->
       <div class="form-field">
-        <label>學校信箱 *</label>
+        <label>學校信箱 / School Email *</label>
         <br><br>
         <input required type="text" class="form-control" v-model="schoolMail" placeholder="請輸入您的學校信箱">
         <br><br><br>
@@ -56,7 +57,7 @@
 
       <!-- 表單第六列：私人信箱 -->
       <div class="form-field">
-        <label>私人信箱 *</label>
+        <label>私人信箱 / Personal Email *</label>
         <br><br>
         <input required type="text" class="form-control" v-model="personalMail" placeholder="請輸入您的私人信箱">
         <br><br><br>
@@ -64,7 +65,7 @@
 
       <!-- 表單第七列：FB帳號 -->
       <div class="form-field">
-        <label>Facebook帳號(暱稱) *</label>
+        <label>Facebook帳號(暱稱) / Facebook Account (Nickname) *</label>
         <br><br>
         <input required type="text" class="form-control" v-model="fbName" placeholder="請輸入您的Facebook帳號(暱稱)">
         <br><br><br>
@@ -72,15 +73,15 @@
 
       <!-- 表單第八列：電話 -->
       <div class="form-field">
-        <label>聯絡方式 *</label>
+        <label>聯絡方式 / Contact Information *</label>
         <br><br>
-        <input required type="text" class="form-control" v-model="phoneNo" placeholder="請輸入您的電話或是手機">
+        <input required type="text" class="form-control" v-model="phoneNo" placeholder="請輸入您的電話或手機 / Phone or Mobile Number">
         <br><br><br>
       </div>
 
       <!-- 表單第九列：地址 -->
       <div class="form-field">
-        <label>地址 *</label>
+        <label>地址 / Address *</label>
         <br><br>
         <input required type="text" class="form-control" v-model="address" placeholder="請輸入您的地址">
         <br><br><br>
@@ -88,15 +89,15 @@
 
       <!-- 表單第十列：指導老師 -->
       <div class="form-field">
-        <label>指導(專題)老師 *</label>
+        <label>指導(專題)老師 / Advisor (Project/Thesis) *</label>
         <br><br>
-        <input required type="text" class="form-control" v-model="teacher" placeholder="請輸入您的指導老師姓名">
+        <input required type="text" class="form-control" v-model="teacher" placeholder="請輸入您的指導老師姓名 / The name of your advisor">
         <br><br><br>
       </div>
 
       <!-- 表單第十一列：畢業年 -->
       <div class="form-field">
-        <label>畢業年份</label>
+        <label>畢業年份 / Graduation Year</label>
         <br><br>
         <input readonly type="text" class="form-control" v-model="user.Year" id="syear">
         <br><br><br>
@@ -104,44 +105,44 @@
 
       <!-- 表單第十二列：目前狀態 -->
       <div class="form-field">
-        <label>目前狀態 *</label>
+        <label>目前狀態 / Current Status *</label>
         <br><br>
         <select required class="select-style" v-model="currState" v-on:change="stateChange">
-          <option value="就業">就業</option>
-					<option value="升學">升學</option>
-					<option value="服兵役">服兵役</option>
-					<option value="延畢">延畢</option>
-					<option value="出國留學">出國留學</option>
-					<option value="其他">其他</option>
+          <option value="就業">就業 / Employment</option>
+					<option value="升學">升學 / Further Studies</option>
+					<option value="服兵役">服兵役 / Military Service</option>
+					<option value="延畢">延畢 / Deferred Graduation</option>
+					<option value="出國留學">出國留學 / Study Abroad</option>
+					<option value="其他">其他 / Other</option>
         </select>
         <br><br><br>
       </div>
 
       <!-- 表單第十三列：狀態詳述 -->
       <div class="form-field">
-        <label>狀態詳述 *</label>
+        <label>狀態詳述 / Status Details *</label>
         <br><br>
         <div v-if="currState == '升學' || currState == '出國留學'">
-          <input required type="text" v-model="detailOne" placeholder="請輸入升學或留學的學校名稱">
-          <input required type="text" v-model="detailTwo" placeholder="請輸入升學或留學的學校科系">
+          <input required type="text" v-model="detailOne" placeholder="請輸入升學或留學的學校名稱 / School Name">
+          <input required type="text" v-model="detailTwo" placeholder="請輸入升學或留學的學校科系 / Department Name">
         </div>
         <div v-if="currState == '就業'">
-          <input required type="text" v-model="detailOne" placeholder="請輸入預計就業的公司名稱">
-          <input required type="text" v-model="detailTwo" placeholder="請輸入預計就業的公司職稱">
+          <input required type="text" v-model="detailOne" placeholder="請輸入預計就業的公司名稱 / Company Name">
+          <input required type="text" v-model="detailTwo" placeholder="請輸入預計就業的公司職稱 / Job Title">
         </div>
         <div v-if="currState == '延畢' || currState == '服兵役'">
           <input type="text" v-model="detailOne">
         </div>
         <div v-if="currState == '其他'">
-          <input required type="text" v-model="detailOne" placeholder="請描述目前的狀態">
+          <input required type="text" v-model="detailOne" placeholder="請描述目前的狀態 / Please describe your current status">
         </div>
         <br><br>
       </div>
 
       <!-- 表單結尾：送出或重填 -->
       <div>
-        <button class="resetBtn" @click="resetForm">重新填寫</button>
-        <button class="submitBtn" type="submit">送出問卷</button>
+        <button class="resetBtn" @click="resetForm">重新填寫 / Rewrite</button>
+        <button class="submitBtn" type="submit">送出問卷 / Submit</button>
       </div>
     </form>
   </div>
@@ -180,7 +181,7 @@ const detailOne = ref('');
 const detailTwo = ref('');
 
 const stateChange = () => {
-  currState.value == '延畢' || currState.value == '服兵役' ? detailOne.value = '本題無需填寫。' : detailOne.value = '';
+  currState.value == '延畢' || currState.value == '服兵役' ? detailOne.value = '本題無需填寫 / No need to fill' : detailOne.value = '';
 }
 
 const resetForm = () => {
@@ -265,6 +266,12 @@ const submitForm = () => {
 }
 
 h1 {
+  margin-top: 0px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+h2 {
   margin-top: 0px;
   margin-bottom: 15px;
   text-align: center;

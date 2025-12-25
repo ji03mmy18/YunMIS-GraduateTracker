@@ -1,9 +1,10 @@
 <template>
   <div class="infobox">
     <h1>畢業生流向調查系統</h1>
+    <h2>Graduate Outcomes Survey System</h2>
     <div class="thumbnail"><img src="@/assets/hat.svg" alt="main page" /></div>
     <form class="form" @submit.prevent="getInfo">
-      <input required class="sid" type="text" v-model="id" placeholder="請填入您的學號">
+      <input required class="sid" type="text" v-model="id" placeholder="您的學號 / Your Student ID">
       <Transition name="admin">
         <div v-if="id == 'manage'">
           <input required class="account" type="text" v-model="account" placeholder="請輸入管理員帳號">
@@ -11,7 +12,7 @@
         </div>
       </Transition>
       <vue-hcaptcha sitekey="c141ec95-c510-46de-9001-2526342cd0ef" @verify="verify"></vue-hcaptcha>
-      <button type="submit">點我填寫</button>
+      <button type="submit">點我填寫 / Next</button>
     </form>
   </div>
   <v-dialog v-model="apiErr" persistent width="600">
@@ -146,13 +147,18 @@ const studentReq = () => {
 .infobox {
   position: relative;
   background: #ffffff;
-  max-width: 360px;
+  max-width: 480px;
   padding: 30px;
   border-radius: 20px;
   text-align: center;
 }
 
 h1 {
+  margin-top: 0px;
+  margin-bottom: 20px;
+}
+
+h2 {
   margin-top: 0px;
   margin-bottom: 20px;
 }

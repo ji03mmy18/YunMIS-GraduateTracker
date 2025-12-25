@@ -1,6 +1,7 @@
 <template>
   <div class="infobox">
     <h1>資管系 流向調查問卷<br>填寫完成！</h1>
+    <h2>Survey Completed !<br>You can close this page now.</h2>
     <div class="thumbnail"><img src="@/assets/check.svg" alt="main page" width="80" height="80"/></div>
     <div class="locateBtn">
       <button class="mis" @click="mis">回資管系網</button>
@@ -27,13 +28,18 @@ const mis = () => {
 .infobox {
   position: relative;
   background: #ffffff;
-  max-width: 360px;
+  max-width: 480px;
   padding: 30px;
   border-radius: 20px;
   text-align: center;
 }
 
 h1 {
+  margin-top: 0px;
+  margin-bottom: 20px;
+}
+
+h2 {
   margin-top: 0px;
   margin-bottom: 20px;
 }
